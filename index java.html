@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NESS Emporium</title>
+  <style>
+    /* ===== STYLE.CSS ===== */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover { text-decoration: underline; }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 { color: #444; margin-top: 40px; }
+
+    /* Cards layout */
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .card {
+      flex: 1;
+      min-width: 200px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    /* Product section */
+    .product-list {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .product {
+      flex: 1;
+      min-width: 150px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #0077cc;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #005fa3; }
+
+    footer {
+      text-align: center;
+      background: #222;
+      color: #fff;
+      padding: 15px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <h1>NESS Emporium</h1>
+    <p>Build with us, Build with pride</p>
+    <nav>
+      <a href="#sales">Sales</a>
+      <a href="#products">Products</a>
+      <a href="#discount">Discount</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- ===== Sales Section ===== -->
+    <section id="sales">
+      <h2>Monthly Sales Calculator</h2>
+      <input type="text" id="salesName" placeholder="Enter Your Name">
+      <input type="number" id="week1" placeholder="Week 1 Sales">
+      <input type="number" id="week2" placeholder="Week 2 Sales">
+      <input type="number" id="week3" placeholder="Week 3 Sales">
+      <input type="number" id="week4" placeholder="Week 4 Sales">
+      <button onclick="calculateSales()">Calculate</button>
+      <div id="salesResult" class="card"></div>
+    </section>
+
+    <!-- ===== Products Section ===== -->
+    <section id="products">
+      <h2>Our Products</h2>
+      <input type="text" id="searchBar" onkeyup="searchProducts()" placeholder="Search product...">
+      <div class="product-list">
+        <div class="product"><img src="paint.jpg" alt="Paint"><p>Paint</p></div>
+        <div class="product"><img src="tools.jpg" alt="Tools"><p>Tools</p></div>
+        <div class="product"><img src="bricks.jpg" alt="Bricks"><p>Bricks</p></div>
+        <div class="product"><img src="wood.jpg" alt="Wood"><p>Wood</p></div>
+      </div>
+    </section>
+
+    <!-- ===== Discount Section ===== -->
+    <section id="discount">
+      <h2>Discount Calculator</h2>
+      <input type="number" id="amount" placeholder="Enter Amount">
+      <input type="number" id="discount" placeholder="Enter Discount %">
+      <button onclick="calculateDiscount()">Apply Discount</button>
+      <div id="discountResult" class="card"></div>
+    </section>
+
+    <!-- ===== Contact Section ===== -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <form onsubmit="return validateForm(event)">
+        <input type="email" id="email" placeholder="Enter your email">
+        <textarea id="message" rows="4" placeholder="Enter your message"></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 NESS Emporium. All Rights Reserved.</p>
+  </footer>
+
+  <!-- ===== SCRIPT.JS ===== -->
+  <script>
+    // 1. Sales Calculator
+    function calculateSales() {
+      const week1 = parseFloat(document.getElementById("week1").value) || 0;
+      const week2 = parseFloat(document.getElementById("week2").value) || 0;
+      const week3 = parseFloat(document.getElementById("week3").value) || 0;
+      const week4 = parseFloat(document.getElementById("week4").value) || 0;
+      const name  = document.getElementById("salesName").value.trim();
+
+      const total = week1 + week2 + week3 + week4;
+      const average = total / 4;
+
+      document.getElementById("salesResult").innerHTML = 
+        `Welcome back <b>${name || "User"}</b><br>
+         Total Sales: R${total.toFixed(2)}<br>
+         Average Weekly Sales: R${average.toFixed(2)}`;
+    }
+
+    // 2. Product Search
+    function searchProducts() {
+      const input = document.getElementById("searchBar").value.toLowerCase();
+      const products = document.getElementsByClassName("product");
+
+      for (let product of products) {
+        const text = product.innerText.toLowerCase();
+        product.style.display = text.includes(input) ? "block" : "none";
+      }
+    }
+
+    // 3. Discount Calculator
+    function calculateDiscount() {
+      const amount = parseFloat(document.getElementById("amount").value) || 0;
+      const discount = parseFloat(document.getElementById("discount").value) || 0;
+
+      if (discount < 0 || discount > 100) {
+        document.getElementById("discountResult").innerHTML =
+          "⚠️ Please enter a discount between 0 and 100.";
+        return;
+      }
+
+      const finalPrice = amount - (amount * (discount / 100));
+
+      document.getElementById("discountResult").innerHTML = 
+        `Original: R${amount.toFixed(2)}<br>
+         Discount: ${discount}%<br>
+         Final Price: R${finalPrice.toFixed(2)}`;
+    }
+
+    // 4. Contact Form Validation
+    function validateForm(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+
+      if (!emailPattern.test(email)) {
+        alert("⚠️ Please enter a valid email address.");
+        return false;
+      }
+      if (message === "") {
+        alert("⚠️ Message cannot be empty.");
+        return false;
+      }
+
+      alert("✅ Message sent successfully!");
+      return true;
+    }
+  </script>
+</body>
+</html>
